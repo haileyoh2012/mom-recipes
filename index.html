@@ -34,7 +34,7 @@
             background-color: var(--primary);
             color: white;
             text-align: center;
-            padding: 24px 16px;
+            padding: 24px 16px 12px 16px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
 
@@ -47,6 +47,34 @@
         header p {
             font-size: 16px;
             opacity: 0.95;
+            margin-bottom: 12px;
+        }
+
+        /* Top Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            background: #1b5e20;
+            padding: 10px 16px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #c8e6c9;
+            border: none;
+            padding: 12px 24px;
+            font-size: 19px;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .notice-banner {
@@ -181,6 +209,12 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .recipe-summary-card:active {
+            transform: scale(0.98);
         }
 
         .card-left {
@@ -188,7 +222,6 @@
             align-items: center;
             gap: 14px;
             flex-grow: 1;
-            cursor: pointer;
         }
 
         .select-btn-badge {
@@ -213,12 +246,14 @@
             font-size: 22px;
             color: var(--primary);
             font-weight: bold;
-            cursor: pointer;
-            padding: 4px 8px;
         }
 
-        .detail-view {
+        .page-section {
             display: none;
+        }
+
+        .page-section.active {
+            display: block;
         }
 
         .back-button {
@@ -325,11 +360,25 @@
             padding: 18px;
             border: 2px solid #a5d6a7;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.1s;
+        }
+
+        .timeline-slot:active {
+            transform: scale(0.98);
+        }
+
+        .timeline-slot:hover {
+            border-color: #2e7d32;
         }
 
         .slot-porridge {
             border-color: #ffb74d;
             background-color: #fff8e1;
+        }
+
+        .slot-porridge:hover {
+            border-color: #f57c00;
         }
 
         .time-badge {
@@ -352,6 +401,13 @@
             font-weight: 800;
             color: #1b5e20;
             margin-bottom: 6px;
+        }
+        
+        .click-hint {
+            font-size: 14px;
+            color: #777;
+            font-weight: 600;
+            margin-left: 6px;
         }
 
         .slot-desc {
@@ -389,6 +445,8 @@
             .recipe-summary-title { font-size: 17px; }
             .detail-title { font-size: 21px; }
             .step-slots { grid-template-columns: 1fr; gap: 8px; }
+            .tab-btn { font-size: 17px; padding: 10px 16px; }
+            .click-hint { display: block; margin-top: 4px; margin-left: 0; }
         }
     </style>
 </head>
@@ -399,11 +457,31 @@
     <p>간 건강·당뇨·위장에 부담 없는 슴슴한 레시피</p>
 </header>
 
+<!-- Main Navigation Tabs -->
+<div class="nav-tabs">
+    <button class="tab-btn active" id="tabRecipes" onclick="switchPage('recipes')">📖 전체 레시피 목록</button>
+    <button class="tab-btn" id="tabPlanner" onclick="switchPage('planner')">📅 식단 플래너</button>
+</div>
+
 <div class="container">
-    <!-- Main ListView with Step-by-Step Meal Planner -->
-    <div id="listView">
+    
+    <!-- PAGE 1: Dedicated Recipe List View -->
+    <div id="recipesPage" class="page-section active">
         <div class="notice-banner">
-            ⚠️ <strong>하루 6식 소식 타임라인:</strong> 아침, 점심, 저녁 메뉴를 순서대로 하나씩 선택해 주세요. 2시간 간격으로 죽(2번 레시피)이 사이마다 배치된 6식 시간표가 완성됩니다!
+            ⚠️ <strong>조리 핵심 원칙:</strong> 마늘·파·고추·후추 등 자극적인 양념 금지! 소금은 한 끼에 약 1g(한 꼬집) 이하로 제한하고, 채소와 해조류는 완벽히 푹 익혀서 드세요.
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="recipeSearchInput" class="search-input" placeholder="🔍 레시피 검색 (예: 미역, 두부)..." onkeyup="filterRecipeListPage()">
+        </div>
+
+        <div class="recipe-list-grid" id="fullRecipeList"></div>
+    </div>
+
+    <!-- PAGE 2: Dedicated Meal Planner Page -->
+    <div id="plannerPage" class="page-section">
+        <div class="notice-banner">
+            ⚠️ <strong>식단 플래너 사용법:</strong> 아침, 점심, 저녁 메뉴를 순서대로 하나씩 선택해 주세요. 선택이 완료되면 자동으로 6식 식단표가 만들어집니다.
         </div>
 
         <!-- Guided Step Progress Box -->
@@ -433,38 +511,40 @@
         </div>
 
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 메뉴 이름 검색 (예: 미역, 두부)..." onkeyup="filterRecipes()">
+            <input type="text" id="plannerSearchInput" class="search-input" placeholder="🔍 메뉴 이름 검색 (예: 소고기, 미역)..." onkeyup="filterPlannerPageList()">
         </div>
 
-        <div class="recipe-list-grid" id="recipeList"></div>
+        <div class="recipe-list-grid" id="plannerRecipeList"></div>
     </div>
 
-    <!-- Detail View -->
-    <div id="detailView" class="detail-view">
-        <button class="back-button" onclick="showListView()">
-            ⬅️ 목록으로 돌아가기
-        </button>
-        <div class="recipe-detail-card" id="recipeDetail"></div>
-    </div>
-
-    <!-- Meal Plan Result View -->
-    <div id="planView" class="detail-view">
+    <!-- PAGE 3: Generated Meal Plan Result Page (Timeline) -->
+    <div id="planResultPage" class="page-section">
         <button class="back-button" onclick="resetAndShowListView()">
-            ⬅️ 메뉴 다시 선택하기 (초기화)
+            ⬅️ 식단 플래너로 돌아가기 (메뉴 다시 선택)
         </button>
 
+        <!-- Red Warning Box for Exceeded Limits -->
         <div id="limitWarningContainer" class="limit-warning"></div>
 
         <div class="recipe-detail-card">
             <div class="detail-title">⏰ 엄마의 하루 6식 맞춤 식단표</div>
             <div style="font-size: 16px; color: #555; margin-bottom: 16px;">
                 * 위장 부담을 줄이기 위해 오전 8시부터 2시간 간격으로 구성되었습니다.<br>
-                * 아침, 점심, 저녁 식사 사이마다 부드러운 <strong>보리 율무 쥐눈이콩 죽(2번 레시피)</strong>이 배치됩니다.
+                * 식단표의 요리를 클릭하시면 <strong>상세 레시피</strong>를 보실 수 있습니다.
             </div>
             
             <div class="meal-timeline" id="timelineContainer"></div>
         </div>
     </div>
+    
+    <!-- PAGE 4: Universal Recipe Detail View -->
+    <div id="detailPage" class="page-section">
+        <button class="back-button" id="btnBackFromDetail" onclick="goBackFromDetail()">
+            ⬅️ 뒤로가기
+        </button>
+        <div class="recipe-detail-card" id="recipeDetail"></div>
+    </div>
+
 </div>
 
 <script>
@@ -570,11 +650,12 @@ const recipes = [
         "title": "13. 두부 애호박 청국장 찌개",
         "servings": "2~3회 소분 섭취 (소식 기준)",
         "ingredients": "• 두부: <span class=\"hl\">최대 100~150g (1/4~1/2모)/일</span>\n• 애호박: <span class=\"hl\">최대 50g (1/4개)/일</span>\n• 청국장: <span class=\"hl\">최대 1~2스푼/일</span> (무염/저염)\n• 소금: <span class=\"hl\">최대 한 꼬집/한 끼</span>",
-        "instructions": "1. 냄비에 물을 자작하게 붓고 깍둑썰기한 애호박과 두부를 넣어 끓입니다.\n2. 애호박이 완전히 익어 부드러워지면 불을 줄이고 청국장을 풀어 넣습니다.\n3. 살짝 한소끔 더 끓여낸 뒤 따뜻하게 드십니다.",
+        "instructions": "1. 냄비에 물 자작하게 붓고 깍둑썰기한 애호박과 두부를 넣어 끓입니다.\n2. 애호박이 완전히 익어 부드러워지면 불을 줄이고 청국장을 풀어 넣습니다.\n3. 살짝 한소끔 더 끓여낸 뒤 따뜻하게 드십니다.",
         "notes": "• 고추, 마늘, 파, 고춧가루 등을 넣지 않고 청국장 본연의 슴슴한 구수함으로 조리.\n• 국물보다는 두부와 애호박 등 건더기 위주로 섭취하여 나트륨 섭취 최소화."
     }
 ];
 
+// Global State
 let mealSelection = {
     breakfast: null,
     lunch: null,
@@ -582,7 +663,9 @@ let mealSelection = {
 };
 
 let currentTargetSlot = 'breakfast'; // 'breakfast' -> 'lunch' -> 'dinner'
+let previousPageBeforeDetail = 'recipes'; // Track where the back button should go
 
+// Hardcoded footprint estimations to calculate daily limits for mother
 const recipeFootprint = {
     1: { "소고기": 50, "두부": 75 },
     2: { "계란 흰자": 1 },
@@ -617,6 +700,72 @@ const dailyLimits = {
     "오트밀": 40
 };
 
+
+// ----------------------------------------------------
+// Navigation / Tab Switching
+// ----------------------------------------------------
+function switchPage(pageName) {
+    // Hide all sections
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    
+    if (pageName === 'recipes') {
+        document.getElementById('recipesPage').classList.add('active');
+        document.getElementById('tabRecipes').classList.add('active');
+        document.getElementById('tabPlanner').classList.remove('active');
+        renderFullRecipeList();
+    } else if (pageName === 'planner') {
+        document.getElementById('plannerPage').classList.add('active');
+        document.getElementById('tabPlanner').classList.add('active');
+        document.getElementById('tabRecipes').classList.remove('active');
+        renderPlannerRecipeList();
+    } else if (pageName === 'planResult') {
+        document.getElementById('planResultPage').classList.add('active');
+        // keep planner tab active visually
+        document.getElementById('tabPlanner').classList.add('active');
+        document.getElementById('tabRecipes').classList.remove('active');
+    } else if (pageName === 'detail') {
+        document.getElementById('detailPage').classList.add('active');
+    }
+    window.scrollTo(0, 0);
+}
+
+// ----------------------------------------------------
+// Page 1: Full Recipe List
+// ----------------------------------------------------
+function renderFullRecipeList(filterText = "") {
+    const listContainer = document.getElementById("fullRecipeList");
+    listContainer.innerHTML = "";
+
+    const filtered = recipes.filter(r => 
+        r.title.includes(filterText) || r.ingredients.includes(filterText)
+    );
+
+    if (filtered.length === 0) {
+        listContainer.innerHTML = `<p style="text-align:center; color:#777; padding:20px; font-size:18px;">검색 결과가 없습니다.</p>`;
+        return;
+    }
+
+    filtered.forEach(r => {
+        const item = document.createElement("div");
+        item.className = "recipe-summary-card";
+        item.onclick = () => showRecipeDetail(r.id, 'recipes');
+        item.innerHTML = `
+            <div class="recipe-summary-title">${r.title}</div>
+            <div class="arrow-icon">▶</div>
+        `;
+        listContainer.appendChild(item);
+    });
+}
+
+function filterRecipeListPage() {
+    const text = document.getElementById("recipeSearchInput").value.trim();
+    renderFullRecipeList(text);
+}
+
+
+// ----------------------------------------------------
+// Page 2: Step-by-Step Planner UI
+// ----------------------------------------------------
 function setActiveSlot(slot) {
     currentTargetSlot = slot;
     updateStepUI();
@@ -626,14 +775,9 @@ function updateStepUI() {
     document.getElementById('slot-breakfast').classList.remove('active');
     document.getElementById('slot-lunch').classList.remove('active');
     document.getElementById('slot-dinner').classList.remove('active');
-
     document.getElementById(`slot-${currentTargetSlot}`).classList.add('active');
 
-    const slotNames = {
-        breakfast: '🌅 [아침 메뉴]',
-        lunch: '☀️ [점심 메뉴]',
-        dinner: '🌙 [저녁 메뉴]'
-    };
+    const slotNames = { breakfast: '🌅 [아침 메뉴]', lunch: '☀️ [점심 메뉴]', dinner: '🌙 [저녁 메뉴]' };
     document.getElementById('stepInstruction').innerText = `선택 중: ${slotNames[currentTargetSlot]}를 아래 목록에서 눌러주세요`;
 
     document.getElementById('val-breakfast').innerText = mealSelection.breakfast ? mealSelection.breakfast.title : '선택 대기중...';
@@ -642,11 +786,8 @@ function updateStepUI() {
 
     ['breakfast', 'lunch', 'dinner'].forEach(s => {
         const card = document.getElementById(`slot-${s}`);
-        if (mealSelection[s]) {
-            card.classList.add('filled');
-        } else {
-            card.classList.remove('filled');
-        }
+        if (mealSelection[s]) card.classList.add('filled');
+        else card.classList.remove('filled');
     });
 
     const btn = document.getElementById('btnBuildPlan');
@@ -665,23 +806,19 @@ function selectRecipeForCurrentSlot(id) {
 
     mealSelection[currentTargetSlot] = recipe;
 
-    if (currentTargetSlot === 'breakfast') {
-        currentTargetSlot = 'lunch';
-    } else if (currentTargetSlot === 'lunch') {
-        currentTargetSlot = 'dinner';
-    }
+    if (currentTargetSlot === 'breakfast') currentTargetSlot = 'lunch';
+    else if (currentTargetSlot === 'lunch') currentTargetSlot = 'dinner';
 
     updateStepUI();
-    renderRecipeList(document.getElementById("searchInput").value.trim());
+    renderPlannerRecipeList(document.getElementById("plannerSearchInput").value.trim());
 }
 
-function renderRecipeList(filterText = "") {
-    const listContainer = document.getElementById("recipeList");
+function renderPlannerRecipeList(filterText = "") {
+    const listContainer = document.getElementById("plannerRecipeList");
     listContainer.innerHTML = "";
 
     const filtered = recipes.filter(r => 
-        r.title.includes(filterText) || 
-        r.ingredients.includes(filterText)
+        r.title.includes(filterText) || r.ingredients.includes(filterText)
     );
 
     if (filtered.length === 0) {
@@ -700,22 +837,31 @@ function renderRecipeList(filterText = "") {
 
         const badgeHtml = selectedSlotLabel 
             ? `<div class="select-btn-badge" style="background:#2e7d32; color:white;">${selectedSlotLabel} 메뉴로 추가됨</div>`
-            : `<div class="select-btn-badge">+ 선택하기</div>`;
+            : `<div class="select-btn-badge">+ 이 요리 추가하기</div>`;
 
         item.innerHTML = `
             <div class="card-left" onclick="selectRecipeForCurrentSlot(${r.id})">
                 ${badgeHtml}
                 <div class="recipe-summary-title">${r.title}</div>
             </div>
-            <div class="arrow-icon" onclick="showRecipeDetail(${r.id})">▶</div>
+            <div class="arrow-icon" onclick="showRecipeDetail(${r.id}, 'planner')">▶</div>
         `;
         listContainer.appendChild(item);
     });
 }
 
+function filterPlannerPageList() {
+    const text = document.getElementById("plannerSearchInput").value.trim();
+    renderPlannerRecipeList(text);
+}
+
+
+// ----------------------------------------------------
+// Page 3: Timeline & Daily Limits
+// ----------------------------------------------------
 function checkLimits(b, l, d, p) {
     const totals = {};
-    const meals = [b, l, d, p]; // 3 mains + 1 daily porridge batch
+    const meals = [b, l, d, p]; // Include porridge once a day since she splits 1 batch
     
     meals.forEach(meal => {
         if (!meal) return;
@@ -745,7 +891,6 @@ function generateMealPlan() {
     const lMeal = mealSelection.lunch || recipes[0];
     const dMeal = mealSelection.dinner || recipes[0];
 
-    // Check Limits
     const warnings = checkLimits(bMeal, lMeal, dMeal, porridgeRecipe);
     const warningContainer = document.getElementById("limitWarningContainer");
     
@@ -753,7 +898,7 @@ function generateMealPlan() {
         warningContainer.style.display = "block";
         warningContainer.innerHTML = `
             <div class="limit-title">🚨 주의: 식단이 특정 재료의 일일 최대 한도를 초과했습니다!</div>
-            <div style="font-size: 16px; color:#c62828; margin-bottom: 12px;">안전한 식단을 위해 [메뉴 다시 선택하기]를 눌러 아래 재료가 겹치지 않게 조절해 주세요.</div>
+            <div style="font-size: 16px; color:#c62828; margin-bottom: 12px;">안전한 식단을 위해 [메뉴 다시 선택하기]를 눌러 아래 재료가 중복되지 않게 조절해 주세요.</div>
             ${warnings.join("")}
         `;
     } else {
@@ -774,46 +919,55 @@ function generateMealPlan() {
         const slotDiv = document.createElement("div");
         if (slot.isPorridge) {
             slotDiv.className = "timeline-slot slot-porridge";
+            slotDiv.onclick = () => showRecipeDetail(slot.recipe.id, 'planResult');
             slotDiv.innerHTML = `
                 <div class="time-badge time-badge-porridge">${slot.time} (${slot.label})</div>
-                <div class="slot-title">🥣 ${slot.recipe.title}</div>
+                <div class="slot-title">🥣 ${slot.recipe.title} <span class="click-hint">(클릭해서 레시피 보기 👆)</span></div>
                 <div class="slot-desc">• 위장에 부담을 주지 않는 영양 보충용 소량 죽 섭취</div>
             `;
         } else {
             slotDiv.className = "timeline-slot";
+            slotDiv.onclick = () => showRecipeDetail(slot.recipe.id, 'planResult');
             slotDiv.innerHTML = `
                 <div class="time-badge">${slot.time} (${slot.label})</div>
-                <div class="slot-title">🍲 ${slot.recipe.title}</div>
+                <div class="slot-title">🍲 ${slot.recipe.title} <span class="click-hint">(클릭해서 레시피 보기 👆)</span></div>
                 <div class="slot-desc">• 소식 기준 1회 분량 섭취 (완전 익힘/저염 엄수)</div>
             `;
         }
         timelineContainer.appendChild(slotDiv);
     });
 
-    document.getElementById("listView").style.display = "none";
-    document.getElementById("detailView").style.display = "none";
-    document.getElementById("planView").style.display = "block";
-    window.scrollTo(0, 0);
+    switchPage('planResult');
 }
 
 function resetAndShowListView() {
-    // Reset Selections
     mealSelection = { breakfast: null, lunch: null, dinner: null };
     currentTargetSlot = 'breakfast';
-    document.getElementById("searchInput").value = "";
+    document.getElementById("plannerSearchInput").value = "";
     
     updateStepUI();
-    renderRecipeList();
-    
-    document.getElementById("planView").style.display = "none";
-    document.getElementById("detailView").style.display = "none";
-    document.getElementById("listView").style.display = "block";
-    window.scrollTo(0, 0);
+    renderPlannerRecipeList();
+    switchPage('planner');
 }
 
-function showRecipeDetail(id) {
+// ----------------------------------------------------
+// Universal Detail View
+// ----------------------------------------------------
+function showRecipeDetail(id, cameFromPage) {
     const recipe = recipes.find(r => r.id === id);
     if (!recipe) return;
+
+    previousPageBeforeDetail = cameFromPage;
+    
+    // Update back button text based on context
+    const btnBack = document.getElementById("btnBackFromDetail");
+    if (cameFromPage === 'recipes') {
+        btnBack.innerText = "⬅️ 전체 목록으로 돌아가기";
+    } else if (cameFromPage === 'planner') {
+        btnBack.innerText = "⬅️ 플래너 메뉴 선택으로 돌아가기";
+    } else if (cameFromPage === 'planResult') {
+        btnBack.innerText = "⬅️ 오늘 식단표로 돌아가기";
+    }
 
     const detailContainer = document.getElementById("recipeDetail");
     detailContainer.innerHTML = `
@@ -829,27 +983,25 @@ function showRecipeDetail(id) {
         <div class="notes-box">💡 <strong>비고 및 주의사항</strong>\n${recipe.notes}</div>
     `;
 
-    document.getElementById("listView").style.display = "none";
-    document.getElementById("planView").style.display = "none";
-    document.getElementById("detailView").style.display = "block";
-    window.scrollTo(0, 0);
+    switchPage('detail');
 }
 
-function showListView() {
-    document.getElementById("detailView").style.display = "none";
-    document.getElementById("planView").style.display = "none";
-    document.getElementById("listView").style.display = "block";
-    window.scrollTo(0, 0);
+function goBackFromDetail() {
+    switchPage(previousPageBeforeDetail);
 }
 
-function filterRecipes() {
-    const text = document.getElementById("searchInput").value.trim();
-    renderRecipeList(text);
-}
+// Initialize System
+document.addEventListener('DOMContentLoaded', () => {
+    switchPage('recipes');
+    updateStepUI();
+    renderPlannerRecipeList();
+});
 
-// Initialize
+// Fallback initialization
+switchPage('recipes');
 updateStepUI();
-renderRecipeList();
+renderPlannerRecipeList();
+
 </script>
 
 </body>
