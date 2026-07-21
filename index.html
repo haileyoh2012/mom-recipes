@@ -11,23 +11,23 @@
             --secondary: #0288d1;
             --bg: #f9fbf8;
             --card-bg: #ffffff;
-            --text: #2c3e50;
-            --text-light: #616161;
-            --border: #e0e0e0;
+            --text: #212121;
+            --border: #cccccc;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 40px;
-            line-height: 1.6;
+            padding-bottom: 50px;
+            line-height: 1.7;
+            font-size: 18px;
         }
 
         header {
@@ -35,29 +35,30 @@
             color: white;
             text-align: center;
             padding: 24px 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
 
         header h1 {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 800;
             margin-bottom: 6px;
         }
 
         header p {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 16px;
+            opacity: 0.95;
         }
 
         .notice-banner {
             background-color: #fff3e0;
-            border-left: 4px solid #ff9800;
-            padding: 12px 16px;
+            border-left: 6px solid #ff9800;
+            padding: 16px;
             margin: 16px auto;
             max-width: 800px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: #e65100;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #d84315;
+            font-weight: 600;
         }
 
         .container {
@@ -67,92 +68,139 @@
         }
 
         .search-container {
-            margin: 16px 0;
+            margin: 20px 0;
         }
 
         .search-input {
             width: 100%;
-            padding: 14px 16px;
-            font-size: 16px;
-            border: 2px solid #c8e6c9;
-            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 18px;
+            border: 3px solid #a5d6a7;
+            border-radius: 14px;
             outline: none;
-            transition: border-color 0.2s;
+            background: #fff;
         }
 
         .search-input:focus {
             border-color: var(--primary);
         }
 
-        .recipe-grid {
+        .recipe-list-grid {
             display: grid;
-            gap: 16px;
+            gap: 14px;
         }
 
-        .recipe-card {
+        .recipe-summary-card {
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-        }
-
-        .recipe-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 12px;
+            padding: 22px 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            border: 2px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.15s;
         }
 
-        .tag {
-            font-size: 11px;
-            background: var(--primary-light);
+        .recipe-summary-card:active {
+            transform: scale(0.98);
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .recipe-summary-title {
+            font-size: 21px;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+
+        .arrow-icon {
+            font-size: 24px;
             color: var(--primary);
-            padding: 4px 8px;
-            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .detail-view {
+            display: none;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e0e0e0;
+            color: #212121;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin: 16px 0;
+        }
+
+        .recipe-detail-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 2px solid var(--primary);
+        }
+
+        .detail-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary-light);
+        }
+
+        .section-header {
+            font-size: 19px;
+            font-weight: 800;
+            color: #2e7d32;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        .ingredients-box {
+            background: #f1f8e9;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 18px;
+            margin-bottom: 16px;
+            white-space: pre-line;
+            border: 1px solid #c8e6c9;
             font-weight: 600;
         }
 
-        .section-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-top: 12px;
-            margin-bottom: 4px;
-        }
-
-        .ingredients-list {
-            background: #f5f5f5;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 12px;
+        .instructions-box {
+            font-size: 18px;
+            margin-bottom: 20px;
             white-space: pre-line;
-        }
-
-        .instructions-list {
-            font-size: 14px;
-            margin-bottom: 12px;
-            white-space: pre-line;
+            line-height: 1.8;
+            padding: 4px;
         }
 
         .notes-box {
             background: #e1f5fe;
-            border-left: 3px solid var(--secondary);
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #0277bd;
+            border-left: 6px solid var(--secondary);
+            padding: 16px 18px;
+            border-radius: 8px;
+            font-size: 17px;
+            color: #01579b;
             white-space: pre-line;
+            font-weight: 600;
+            line-height: 1.7;
         }
 
         @media (max-width: 600px) {
-            header h1 { font-size: 20px; }
-            .recipe-card { padding: 16px; }
-            .recipe-title { font-size: 16px; }
+            header h1 { font-size: 22px; }
+            body { font-size: 17px; }
+            .recipe-summary-title { font-size: 19px; }
+            .detail-title { font-size: 21px; }
         }
     </style>
 </head>
@@ -160,96 +208,120 @@
 
 <header>
     <h1>🌿 엄마를 위한 맞춤 건강 식단</h1>
-    <p>간 건강·당뇨·위장에 부담 없는 슴슴하고 안전한 레시피 모음</p>
+    <p>간 건강·당뇨·위장에 부담 없는 슴슴한 레시피</p>
 </header>
 
 <div class="container">
-    <div class="notice-banner">
-        ⚠️ <strong>조리 핵심 원칙:</strong> 마늘·파·고추·후추 등 자극적인 양념 금지! 소금은 한 끼에 약 1g(한 꼬집) 이하로 제한하고, 채소와 해조류는 완벽히 푹 익혀서 드세요.
+    <!-- ListView -->
+    <div id="listView">
+        <div class="notice-banner">
+            ⚠️ <strong>조리 핵심 원칙:</strong> 마늘·파·고추·후추 등 자극적인 양념 금지! 소금은 한 끼에 약 1g(한 꼬집) 이하로 제한하고, 채소와 해조류는 완벽히 푹 익혀서 드세요.
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 메뉴 이름 검색 (예: 미역, 두부)..." onkeyup="filterRecipes()">
+        </div>
+
+        <div class="recipe-list-grid" id="recipeList"></div>
     </div>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 검색 (예: 미역, 두부, 소고기)..." onkeyup="filterRecipes()">
+    <!-- Detail View -->
+    <div id="detailView" class="detail-view">
+        <button class="back-button" onclick="showListView()">
+            ⬅️ 목록으로 돌아가기
+        </button>
+        <div class="recipe-detail-card" id="recipeDetail"></div>
     </div>
-
-    <div class="recipe-grid" id="recipeGrid"></div>
 </div>
 
 <script>
 const recipes = [
     {
+        id: 1,
         title: "1. 소고기 두부 부드러운 찌개",
         ingredients: "• 소고기 (살코기 50g 이하)\n• 두부 (1/4모)\n• 호박 (1/4개, 50g)\n• 숙주나물 (50g)\n• 소금 (약 1g, 한 꼬집)",
         instructions: "1. 냄비에 물을 붓고 소고기를 넣어 슴슴한 육수를 냅니다.\n2. 깍둑썰기한 호박, 숙주나물, 두부를 넣습니다.\n3. 채소가 소화하기 쉽게 완전히 푹 익을 때까지 끓입니다.\n4. 소금 한 꼬집으로 미량만 간을 합니다.",
         notes: "• 소고기는 지방이 없는 부위로 50g 이하 유지.\n• 소화에 무리가 없도록 모든 채소는 푹 익혀서 제공."
     },
     {
+        id: 2,
         title: "2. 보리 율무 쥐눈이콩 죽",
         ingredients: "• 보리 (2스푼)\n• 율무 (1스푼)\n• 쥐눈이콩 (1~2스푼)\n• 계란 흰자 (1개)",
         instructions: "1. 곡물류를 전날 밤 오랫동안 불린 후 믹서기에 부드럽게 갈아줍니다.\n2. 물을 넣고 약불에서 눌러붙지 않게 저어가며 푹 끓입니다.\n3. 마지막에 계란 흰자를 풀어서 완벽히 익을 때까지 저어줍니다.",
         notes: "• 조리 전 반드시 오랫동안 불리거나 믹서로 갈아서 사용.\n• 소화에 부담을 주지 않으면서 식물성+달걀 흰자 단백질 보충."
     },
     {
+        id: 3,
         title: "3. 익힌 미나리 당근 비빔밥",
         ingredients: "• 미나리 (50g)\n• 당근 (50g)\n• 청국장 (1~2스푼, 무염/저염)\n• 검은깨 (1스푼)\n• 잡곡밥 (1공기)",
         instructions: "1. 미나리와 다진 당근을 물에 넣고 완전히 푹 삶거나 찌기.\n2. 따뜻한 잡곡밥 위에 익힌 채소를 올립니다.\n3. 무염/저염 청국장 건더기와 빻은 검은깨를 얹어 비벼 드십니다.",
         notes: "• 미나리는 날것으로 먹지 말고 100% 완전 조리.\n• 당근은 혈당 관리를 위해 1/4개(50g) 수량 엄수."
     },
     {
+        id: 4,
         title: "4. 데친 시금치 두부 무침",
         ingredients: "• 시금치 (50g)\n• 두부 (1/4모)\n• 소금 (한 꼬집)\n• 빻은 검은깨",
         instructions: "1. 끓는 물에 시금치를 푹 데쳐낸 후, 데친 물은 완전히 버립니다.\n2. 두부는 으깬 뒤 끓는 물에 살짝 데쳐냅니다.\n3. 데친 시금치와 두부를 섞고 소금 한 꼬집과 검은깨로 무칩니다.",
         notes: "• 끓는 물에 데쳐서 수산(Oxalate) 성분을 반드시 제거 후 섭취.\n• 씹기 편하고 부드러운 반찬."
     },
     {
+        id: 5,
         title: "5. 십자화과 채소 계란흰자 찜",
         ingredients: "• 십자화과 채소 (50g)\n• 계란 흰자 (1개)\n• 소금 (한 꼬집)",
         instructions: "1. 브로콜리나 양배추를 아주 부드럽게 푹 찌거나 삶습니다.\n2. 계란 흰자에 물 약간과 소금 한 꼬집을 넣고 풀어줍니다.\n3. 찜기에 부드럽게 쪄낸 후 익힌 채소와 함께 제공합니다.",
         notes: "• 채소는 완전히 삶거나 쪄서 제공.\n• 위장관에 자극을 주지 않는 순수한 단백질 공급원."
     },
     {
+        id: 6,
         title: "6. 익힌 사과 디저트",
         ingredients: "• 사과 (1/4개)",
         instructions: "1. 사과 껍질을 잘게 벗기고 얇게 편으로 썰어줍니다.\n2. 냄비나 찜기에 물을 자작하게 넣고 투명하고 부드러워질 때까지 푹 익혀서 드십니다.",
         notes: "• 당뇨 관리를 위해 하루 1/4개 리밋 지키기.\n• 사과를 익히면 예민한 소화기(소화장애)에 훨씬 편안함."
     },
     {
+        id: 7,
         title: "7. 부드러운 들깨 미역국",
         ingredients: "• 건미역 (5~10g, 불린 것)\n• 들깨가루 (1스푼)\n• 소금 (약 1g, 한 꼬집)",
         instructions: "1. 미역을 물에 충분히 불린 후 자극이 없도록 불린 물을 버리고 세척합니다.\n2. 냄비에 물을 붓고 미역이 흐물거릴 정도로 오랫동안 푹 끓입니다.\n3. 들깨가루를 넣어 고소한 맛을 내고 소금 한 꼬집으로 미량만 간을 합니다.",
         notes: "• 마늘, 참기름, 국간장 없이 미역과 들깨가루 본연의 맛으로 조리.\n• 미역은 질기지 않게 아주 푹 끓여서 제공."
     },
     {
+        id: 8,
         title: "8. 부드러운 오트밀 달걀죽",
         ingredients: "• 오트밀 (3~4스푼, 약 30g)\n• 계란 흰자 (1개)\n• 소금 (한 꼬집)",
         instructions: "1. 냄비에 물을 넉넉히 붓고 오트밀을 넣은 뒤 약불에서 부드럽게 퍼질 때까지 끓입니다.\n2. 오트밀이 퍼지면 풀어둔 계란 흰자를 넣고 완벽히 익을 때까지 살살 저어줍니다.\n3. 소금 한 꼬집을 넣어 간을 한 뒤 따뜻하게 드십니다.",
         notes: "• 오트밀은 정제되지 않은 복합 탄수화물이라 당뇨 혈당 관리에 우수.\n• 위장에 자극 없이 매우 부드럽게 소화됨."
     },
     {
+        id: 9,
         title: "9. 소화가 편한 따뜻한 콩쉐이크",
         ingredients: "• 쥐눈이콩 또는 일반 콩\n• 물 또는 무첨가 두유 반 컵",
         instructions: "1. 콩을 전날 밤 오랫동안 물에 충분히 불립니다.\n2. 푹 삶아낸 콩을 껍질째 믹서기에 물과 함께 알갱이가 전혀 없이 아주 미세하게 갈아줍니다.\n3. 차갑게 드시면 위장에 자극이 가므로, 미지근하거나 따뜻하게 데워서 드십니다.",
         notes: "• 찬 음료는 위장관(소화장애)을 자극하므로 반드시 미지근하거나 따뜻하게 제공.\n• 콩 껍질까지 미세하게 갈아야 소화에 부담이 없음."
     },
     {
+        id: 10,
         title: "10. 미역 두부 들깨 덮밥",
         ingredients: "• 불린 미역 (50g)\n• 두부 (1/4모)\n• 들깨가루 (1스푼)\n• 소금 (한 꼬집)\n• 잡곡밥 (1공기)",
         instructions: "1. 불린 미역을 자르게 채 썰어 물에 푹 삶아 부드럽게 만듭니다.\n2. 으깬 두부와 들깨가루, 물 약간을 넣고 함께 자작하게 조려줍니다.\n3. 소금 한 꼬집으로 간을 한 뒤 따뜻한 잡곡밥 위에 자작하게 얹어 드십니다.",
         notes: "• 자극적인 양념장 없이 들깨의 고소함과 미역의 부드러움으로 섭취.\n• 단백질(두부, 들깨)과 식이섬유(미역)의 훌륭한 조합."
     },
     {
+        id: 11,
         title: "11. 소고기 부드러운 미역국",
         ingredients: "• 건미역 (5~10g, 불린 것)\n• 소고기 (살코기 50g 이하)\n• 소금 (약 1g, 한 꼬집)",
         instructions: "1. 소고기를 물에 넣고 먼저 넣어 슴슴한 육수를 만듭니다.\n2. 불려서 세척한 미역을 작게 잘라 육수에 넣습니다.\n3. 미역과 고기가 아주 흐물거리도록 약불에서 오랫동안 푹 끓여줍니다.\n4. 소금 한 꼬집으로 미량만 간을 합니다.",
         notes: "• 마늘, 참기름, 참치액, 국간장 등 자극적인 양념 절대 금지.\n• 미역과 소고기가 완전히 부드러워질 때까지 푹 익혀서 제공."
     },
     {
+        id: 12,
         title: "12. 익힌 양배추 쌈 반찬",
         ingredients: "• 양배추 (50g, 십자화과 채소 리밋 내)\n• 청국장 (1스푼, 무염/저염)\n• 빻은 검은깨 (1스푼)",
         instructions: "1. 양배추 잎을 찜기에 넣고 젓가락이 쑥 들어갈 정도로 부드럽게 푹 찌기.\n2. 무염/저염 청국장 건더기와 빻은 검은깨를 살짝 얹어 쌈 형태로 싸 드십니다.",
         notes: "• 양배추는 날것(생채소)으로 먹으면 위장관 및 식도에 자극을 주므로 100% 푹 찐 상태로 섭취.\n• 청국장은 나트륨 관리를 위해 무염/저염 건더기 위주로 사용."
     },
     {
+        id: 13,
         title: "13. 두부 애호박 청국장 찌개",
         ingredients: "• 두부 (1/4모)\n• 애호박 (1/4개, 50g)\n• 청국장 (1~2스푼, 무염/저염)\n• 소금 (필요 시 한 꼬집)",
         instructions: "1. 냄비에 물을 자작하게 붓고 깍둑썰기한 애호박과 두부를 넣어 끓입니다.\n2. 애호박이 완전히 익어 부드러워지면 불을 줄이고 청국장을 풀어 넣습니다.\n3. 살짝 한소끔 더 끓여낸 뒤 따뜻하게 드십니다.",
@@ -257,9 +329,9 @@ const recipes = [
     }
 ];
 
-function renderRecipes(filterText = "") {
-    const container = document.getElementById("recipeGrid");
-    container.innerHTML = "";
+function renderRecipeList(filterText = "") {
+    const listContainer = document.getElementById("recipeList");
+    listContainer.innerHTML = "";
 
     const filtered = recipes.filter(r => 
         r.title.includes(filterText) || 
@@ -267,34 +339,56 @@ function renderRecipes(filterText = "") {
     );
 
     if (filtered.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#999; padding:20px;">검색 결과가 없습니다.</p>`;
+        listContainer.innerHTML = `<p style="text-align:center; color:#777; padding:20px; font-size:18px;">검색 결과가 없습니다.</p>`;
         return;
     }
 
     filtered.forEach(r => {
-        const card = document.createElement("div");
-        card.className = "recipe-card";
-        card.innerHTML = `
-            <div class="recipe-title">
-                ${r.title}
-                <span class="tag">맞춤 식단</span>
-            </div>
-            <div class="section-title">🛒 주요 재료</div>
-            <div class="ingredients-list">${r.ingredients}</div>
-            <div class="section-title">🍳 조리 방법</div>
-            <div class="instructions-list">${r.instructions}</div>
-            <div class="notes-box">💡 <strong>비고 및 주의사항</strong>\n${r.notes}</div>
+        const item = document.createElement("div");
+        item.className = "recipe-summary-card";
+        item.onclick = () => showRecipeDetail(r.id);
+        item.innerHTML = `
+            <div class="recipe-summary-title">${r.title}</div>
+            <div class="arrow-icon">▶</div>
         `;
-        container.appendChild(card);
+        listContainer.appendChild(item);
     });
+}
+
+function showRecipeDetail(id) {
+    const recipe = recipes.find(r => r.id === id);
+    if (!recipe) return;
+
+    const detailContainer = document.getElementById("recipeDetail");
+    detailContainer.innerHTML = `
+        <div class="detail-title">${recipe.title}</div>
+        
+        <div class="section-header">🛒 주요 재료</div>
+        <div class="ingredients-box">${recipe.ingredients}</div>
+        
+        <div class="section-header">🍳 조리 방법</div>
+        <div class="instructions-box">${recipe.instructions}</div>
+        
+        <div class="notes-box">💡 <strong>비고 및 주의사항</strong>\n${recipe.notes}</div>
+    `;
+
+    document.getElementById("listView").style.display = "none";
+    document.getElementById("detailView").style.display = "block";
+    window.scrollTo(0, 0);
+}
+
+function showListView() {
+    document.getElementById("detailView").style.display = "none";
+    document.getElementById("listView").style.display = "block";
+    window.scrollTo(0, 0);
 }
 
 function filterRecipes() {
     const text = document.getElementById("searchInput").value.trim();
-    renderRecipes(text);
+    renderRecipeList(text);
 }
 
-renderRecipes();
+renderRecipeList();
 </script>
 
 </body>
